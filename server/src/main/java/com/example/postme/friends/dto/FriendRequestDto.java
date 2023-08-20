@@ -14,6 +14,6 @@ import lombok.experimental.FieldDefaults;
 public class FriendRequestDto {
     Long id;
     UserShort user;
-    UserShort requestFromUser;
+    UserShort sub;
     RequestStatus status;
 }

@@ -7,12 +7,15 @@ import com.example.postme.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class FriendRequestServiceImpl implements FriendRequestService {
     private final FriendRequestRepository friendRequestRepository;
     private final UserRepository userRepository;
@@ -24,6 +27,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
+    @Transactional
     public FriendRequestDto add(String username, String followedName) {
         if (userRepository.findByName(followedName).isEmpty()) {
             throw new NullPointerException("User not found");
@@ -52,6 +56,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
+    @Transactional
     public FriendRequestDto apply(String username, long requestId) {
         FriendRequest friendRequest = friendRequestRepository.findById(requestId)
                 .orElseThrow(() -> new NullPointerException("Request not found"));
@@ -63,6 +68,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
+    @Transactional
     public FriendRequestDto cancel(String username, long requestId) {
         FriendRequest friendRequest = friendRequestRepository.findById(requestId)
                 .orElseThrow(() -> new NullPointerException("Request not found"));
@@ -74,19 +80,24 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
+    @Transactional
     public void unsub(String username, String followedName) {
         if (userRepository.findByName(followedName).isEmpty()) {
             throw new NullPointerException("User not found");
         }
-        FriendRequest friendRequest = friendRequestRepository.findByUserAndSub(followedName, username)
-                .orElseThrow(() -> new WrongConditionException("You didn't subscribed on the user"));
-        if (friendRequest.getStatus() == RequestStatus.ACCEPTED) {
+        Optional<FriendRequest> friendRequest = friendRequestRepository.findByUserAndSub(followedName, username);
+        Optional<FriendRequest> friendship = friendRequestRepository.findByUserAndSubAndStatus(username, followedName,
+                RequestStatus.ACCEPTED);
+        if (friendRequest.isEmpty() && friendship.isEmpty()) throw new WrongConditionException("Please subscribe");
+
+        friendship.ifPresent(request -> friendRequestRepository.deleteById(request.getId()));
+        friendRequest.ifPresent(request -> friendRequestRepository.deleteById(request.getId()));
+        if (friendship.isPresent() || friendRequest.get().getStatus() == RequestStatus.ACCEPTED) {
             friendRequestRepository.save(FriendRequest.builder()
                     .user(username)
                     .sub(followedName)
                     .status(RequestStatus.CANCELED)
                     .build());
         }
-        friendRequestRepository.deleteById(friendRequest.getId());
     }
 }

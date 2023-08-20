@@ -14,4 +14,5 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
     List<FriendRequest> findAllBySub(String username, PageRequest pageRequest);
     Optional<FriendRequest> findByUserAndSub(String user, String sub);
     List<FriendRequest> findAllByUserAndStatus(String userName, RequestStatus status);
+    Optional<FriendRequest> findByUserAndSubAndStatus(String user, String sub, RequestStatus status);
 }

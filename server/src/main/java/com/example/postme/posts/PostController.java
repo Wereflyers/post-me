@@ -1,5 +1,6 @@
 package com.example.postme.posts;
 
+import com.example.postme.exception.ValidationException;
 import com.example.postme.posts.dto.NewPostDto;
 import com.example.postme.posts.dto.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class PostController {
     @GetMapping
     public List<PostDto> getAll(@RequestHeader String username, @RequestParam(defaultValue = "0") int from,
                                 @RequestParam(defaultValue = "10") int size) {
+        if (from < 0 || size < 1) {
+            throw new ValidationException("Wrong parameters");
+        }
         return postService.getAllForUser(username, from, size);
     }
 
@@ -50,6 +54,9 @@ public class PostController {
 
     @GetMapping("/sub")
     public List<PostDto> getAllFollowed(@RequestHeader String username, @RequestParam(defaultValue = "0") int from) {
+        if (from < 0) {
+            throw new ValidationException("Wrong parameters");
+        }
         return postService.getAllFollowed(username, from);
     }
 }
