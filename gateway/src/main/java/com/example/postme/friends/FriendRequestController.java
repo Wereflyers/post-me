@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping(path = "/requests")
 @RequiredArgsConstructor
@@ -11,35 +13,35 @@ public class FriendRequestController {
 
     private final FriendRequestClient friendRequestClient;
 
-    @PostMapping("/{followedId}")
-    public ResponseEntity<Object> addRequest(@RequestHeader long userId, @PathVariable long followedId) {
-        return friendRequestClient.add(userId, followedId);
+    @PostMapping("/{followedName}")
+    public ResponseEntity<Object> addRequest(Principal principal, @PathVariable String followedName) {
+        return friendRequestClient.add(principal.getName(), followedName);
     }
 
     @GetMapping
-    public ResponseEntity<Object> getRequests(@RequestHeader long userId,
+    public ResponseEntity<Object> getRequests(Principal principal,
                                                     @RequestParam(value = "from", defaultValue = "0") int from) {
-        return friendRequestClient.getRequests(userId, from);
+        return friendRequestClient.getRequests(principal.getName(), from);
     }
 
     //TODO disperancy between swagger
     @GetMapping("/{requestId}")
-    public ResponseEntity<Object> get(@RequestHeader long userId, @PathVariable long requestId) {
-        return friendRequestClient.get(userId, requestId);
+    public ResponseEntity<Object> get(Principal principal, @PathVariable long requestId) {
+        return friendRequestClient.get(principal.getName(), requestId);
     }
 
     @PatchMapping("/{requestId}/apply")
-    public ResponseEntity<Object> apply(@RequestHeader long userId, @PathVariable long requestId) {
-        return friendRequestClient.apply(userId, requestId);
+    public ResponseEntity<Object> apply(Principal principal, @PathVariable long requestId) {
+        return friendRequestClient.apply(principal.getName(), requestId);
     }
 
     @PatchMapping("/{requestId}/cancel")
-    public ResponseEntity<Object> cancel(@RequestHeader long userId, @PathVariable long requestId) {
-        return friendRequestClient.cancel(userId, requestId);
+    public ResponseEntity<Object> cancel(Principal principal, @PathVariable long requestId) {
+        return friendRequestClient.cancel(principal.getName(), requestId);
     }
 
-    @DeleteMapping("/{followedId}")
-    public ResponseEntity<Object> unsub(@RequestHeader long userId, @PathVariable long followedId) {
-        return friendRequestClient.unsub(userId, followedId);
+    @DeleteMapping("/{followedName}")
+    public ResponseEntity<Object> unsub(Principal principal, @PathVariable String followedName) {
+        return friendRequestClient.unsub(principal.getName(), followedName);
     }
 }

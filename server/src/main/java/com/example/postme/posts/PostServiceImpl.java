@@ -4,6 +4,7 @@ import com.example.postme.exception.ValidationException;
 import com.example.postme.exception.WrongConditionException;
 import com.example.postme.friends.FriendRequest;
 import com.example.postme.friends.FriendRequestRepository;
+import com.example.postme.friends.RequestStatus;
 import com.example.postme.posts.dto.NewPostDto;
 import com.example.postme.posts.dto.PostDto;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,30 +23,30 @@ public class PostServiceImpl implements PostService {
     private final FriendRequestRepository friendRequestRepository;
 
     @Override
-    public List<PostDto> getAllForUser(long userId, int from, int size) {
+    public List<PostDto> getAllForUser(String username, int from, int size) {
        //TODO validation from, size in controller
-        return postRepository.findAllByCreatorOrderByPublishedOn(userId, PageRequest.of(from / size, size)).stream()
+        return postRepository.findAllByCreatorOrderByPublishedOn(username, PageRequest.of(from / size, size)).stream()
                 .map(PostMapper::toPostDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public PostDto add(long userId, NewPostDto newPostDto) {
-        Post post = postRepository.save(PostMapper.fromNewPostDto(newPostDto, userId));
+    public PostDto add(String username, NewPostDto newPostDto) {
+        Post post = postRepository.save(PostMapper.fromNewPostDto(newPostDto, username));
         return PostMapper.toPostDto(post);
     }
 
     @Override
-    public PostDto get(long postId, long userId) {
+    public PostDto get(long postId, String username) {
         return PostMapper.toPostDto(postRepository.findById(postId).orElseThrow(
                 () -> new NullPointerException("Post with id=" + postId + " was not found")));
     }
 
     @Override
-    public PostDto update(long userId, long postId, NewPostDto newPostDto) {
+    public PostDto update(String username, long postId, NewPostDto newPostDto) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new NullPointerException("Post with id=" + postId + " was not found"));
-        if (post.getCreator() != userId) {
+        if (!Objects.equals(post.getCreator(), username)) {
             throw new WrongConditionException("You have no rights to update this post.");
         }
         if (newPostDto.getTitle() != null) post.setTitle(newPostDto.getTitle());
@@ -53,26 +55,29 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void delete(long userId, long postId) {
+    public void delete(String username, long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new NullPointerException("Post with id=" + postId + " was not found"));
-        if (post.getCreator() != userId) {
+        if (!Objects.equals(post.getCreator(), username)) {
             throw new WrongConditionException("You have no rights to delete this post.");
         }
         postRepository.deleteById(postId);
     }
 
     @Override
-    public List<PostDto> getAllFollowed(long userId, int from) {
+    public List<PostDto> getAllFollowed(String username, int from) {
         //TODO validation from in controller
         if (from < 0) {
             throw new ValidationException("Wrong parameters");
         }
-        List<FriendRequest> followedUsers = friendRequestRepository.findAllBySub(userId, PageRequest.of(0 / 20, 20));
-        List<Long> followedUsersIds = followedUsers.stream()
+        List<FriendRequest> followedUsers = friendRequestRepository.findAllBySub(username, PageRequest.of(0 / 20, 20));
+        List<String> followedUsersNames = followedUsers.stream()
                 .map(FriendRequest::getUser)
                 .collect(Collectors.toList());
-        return postRepository.findAllByCreatorInOrderByPublishedOnDesc(followedUsersIds, PageRequest.of(from / 10, 10)).stream()
+        friendRequestRepository.findAllByUserAndStatus(username, RequestStatus.ACCEPTED).stream()
+                .map(FriendRequest::getSub)
+                .forEach(followedUsersNames::add);
+        return postRepository.findAllByCreatorInOrderByPublishedOnDesc(followedUsersNames, PageRequest.of(from / 10, 10)).stream()
                 .map(PostMapper::toPostDto)
                 .collect(Collectors.toList());
     }

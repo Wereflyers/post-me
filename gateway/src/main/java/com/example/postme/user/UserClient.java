@@ -2,7 +2,6 @@ package com.example.postme.user;
 
 import com.example.postme.client.BaseClient;
 import com.example.postme.user.dto.UserDto;
-import com.example.postme.user.dto.UserForUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -25,23 +24,8 @@ public class UserClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> getAllUsers() {
-        return get("");
-    }
-
-    public ResponseEntity<Object> getUser(long userId) {
-        return get("/" + userId);
-    }
-
     public ResponseEntity<Object> addUser(UserDto user) {
         return post("", user);
     }
 
-    public ResponseEntity<Object> updateUser(long userId, UserForUpdate user) {
-        return patch("/" + userId, user);
-    }
-
-    public ResponseEntity<Object> deleteUser(long userId) {
-        return delete("/" + userId);
-    }
 }

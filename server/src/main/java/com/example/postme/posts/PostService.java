@@ -8,15 +8,15 @@ import java.util.List;
 public interface PostService {
     //TODO docs
 
-    List<PostDto> getAllForUser(long userId, int from, int size);
+    List<PostDto> getAllForUser(String username, int from, int size);
 
-    PostDto add(long userId, NewPostDto newPostDto);
+    PostDto add(String username, NewPostDto newPostDto);
 
-    PostDto get(long id, long userId);
+    PostDto get(long id, String username);
 
-    PostDto update(long userId, long id, NewPostDto newPostDto);
+    PostDto update(String username, long id, NewPostDto newPostDto);
 
-    void delete(long userId, long id);
+    void delete(String username, long id);
 
-    List<PostDto> getAllFollowed(long userId, int from);
+    List<PostDto> getAllFollowed(String username, int from);
 }

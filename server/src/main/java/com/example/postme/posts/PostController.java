@@ -21,35 +21,35 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostDto> getAll(@RequestHeader long userId, @RequestParam(defaultValue = "0") int from,
+    public List<PostDto> getAll(@RequestHeader String username, @RequestParam(defaultValue = "0") int from,
                                 @RequestParam(defaultValue = "10") int size) {
-        return postService.getAllForUser(userId, from, size);
+        return postService.getAllForUser(username, from, size);
     }
 
     @GetMapping("/{id}")
-    public PostDto get(@RequestHeader long userId, @PathVariable long id) {
-        return postService.get(id,userId);
+    public PostDto get(@RequestHeader String username, @PathVariable long id) {
+        return postService.get(id,username);
     }
 
     @PostMapping
-    public PostDto add(@RequestHeader long userId, @RequestBody NewPostDto newPostDto) {
-        return postService.add(userId, newPostDto);
+    public PostDto add(@RequestHeader String username, @RequestBody NewPostDto newPostDto) {
+        return postService.add(username, newPostDto);
     }
 
     @PatchMapping("/{id}")
-    public PostDto update(@RequestHeader long userId, @PathVariable long id,
+    public PostDto update(@RequestHeader String username, @PathVariable long id,
                                   @RequestBody NewPostDto newPostDto) {
-        return postService.update(userId, id, newPostDto);
+        return postService.update(username, id, newPostDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@RequestHeader long userId, @PathVariable long id) {
-        postService.delete(userId, id);
+    public void delete(@RequestHeader String username, @PathVariable long id) {
+        postService.delete(username, id);
     }
 
     @GetMapping("/sub")
-    public List<PostDto> getAllFollowed(@RequestHeader long userId, @RequestParam(defaultValue = "0") int from) {
-        return postService.getAllFollowed(userId, from);
+    public List<PostDto> getAllFollowed(@RequestHeader String username, @RequestParam(defaultValue = "0") int from) {
+        return postService.getAllFollowed(username, from);
     }
 }

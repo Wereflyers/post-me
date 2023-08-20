@@ -18,36 +18,36 @@ public class FriendRequestController {
         this.friendRequestService = friendRequestService;
     }
 
-    @PostMapping("/{followedId}")
-    public FriendRequestDto addRequest(@RequestHeader long userId, @PathVariable long followedId) {
-        return friendRequestService.add(userId, followedId);
+    @PostMapping("/{followedName}")
+    public FriendRequestDto addRequest(@RequestHeader String username, @PathVariable String followedName) {
+        return friendRequestService.add(username, followedName);
     }
 
     @GetMapping
-    public List<FriendRequestDto> getRequests(@RequestHeader long userId,
+    public List<FriendRequestDto> getRequests(@RequestHeader String username,
                                                     @RequestParam(value = "from", defaultValue = "0") int from) {
-        return friendRequestService.getRequests(userId, from);
+        return friendRequestService.getRequests(username, from);
     }
 
     //TODO disperancy between swagger
     @GetMapping("/{requestId}")
-    public FriendRequestDto get(@RequestHeader long userId, @PathVariable long requestId) {
-        return friendRequestService.get(userId, requestId);
+    public FriendRequestDto get(@RequestHeader String username, @PathVariable long requestId) {
+        return friendRequestService.get(username, requestId);
     }
 
     @PatchMapping("/{requestId}/apply")
-    public FriendRequestDto apply(@RequestHeader long userId, @PathVariable long requestId) {
-        return friendRequestService.apply(userId, requestId);
+    public FriendRequestDto apply(@RequestHeader String username, @PathVariable long requestId) {
+        return friendRequestService.apply(username, requestId);
     }
 
     @PatchMapping("/{requestId}/cancel")
-    public FriendRequestDto cancel(@RequestHeader long userId, @PathVariable long requestId) {
-        return friendRequestService.cancel(userId, requestId);
+    public FriendRequestDto cancel(@RequestHeader String username, @PathVariable long requestId) {
+        return friendRequestService.cancel(username, requestId);
     }
 
-    @DeleteMapping("/{followedId}")
+    @DeleteMapping("/{followedName}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void unsub(@RequestHeader long userId, @PathVariable long followedId) {
-        friendRequestService.unsub(userId, followedId);
+    public void unsub(@RequestHeader String username, @PathVariable String followedName) {
+        friendRequestService.unsub(username, followedName);
     }
 }

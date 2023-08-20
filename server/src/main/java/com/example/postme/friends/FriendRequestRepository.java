@@ -10,7 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface FriendRequestRepository extends JpaRepository<FriendRequest, Long>, QuerydslPredicateExecutor<FriendRequest> {
-    Optional<FriendRequest> findByIdAndUserOrSub(long id, long userId, long followedId);
-    List<FriendRequest> findAllBySub(long userId, PageRequest pageRequest);
-    Optional<FriendRequest> findByUserAndSub(long userId, long subId);
+    Optional<FriendRequest> findByIdAndUserOrSub(Long id, String user, String sub);
+    List<FriendRequest> findAllBySub(String username, PageRequest pageRequest);
+    Optional<FriendRequest> findByUserAndSub(String user, String sub);
+    List<FriendRequest> findAllByUserAndStatus(String userName, RequestStatus status);
 }
