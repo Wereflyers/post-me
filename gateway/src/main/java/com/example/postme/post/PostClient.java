@@ -26,34 +26,34 @@ public class PostClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> getAllForUser(long userId, int from, int size) {
+    public ResponseEntity<Object> getAllForUser(String username, int from, int size) {
         Map<String, Object> parameters = Map.of(
                 "from", from,
                 "size", size
         );
-        return get("?from={from}&size={size}", userId, parameters);
+        return get("?from={from}&size={size}", username, parameters);
     }
 
-    public ResponseEntity<Object> get(long userId, long id) {
-        return get("/" + id, userId);
+    public ResponseEntity<Object> get(String username, long id) {
+        return get("/" + id, username);
     }
 
-    public ResponseEntity<Object> add(long userId, NewPostDto newPostDto) {
-        return post("", userId, newPostDto);
+    public ResponseEntity<Object> add(String username, NewPostDto newPostDto) {
+        return post("", username, newPostDto);
     }
 
-    public ResponseEntity<Object> update(long userId, long id, NewPostDto newPostDto) {
-        return patch("/" + id, userId, newPostDto);
+    public ResponseEntity<Object> update(String username, long id, NewPostDto newPostDto) {
+        return patch("/" + id, username, newPostDto);
     }
 
-    public ResponseEntity<Object> delete(long userId, long id) {
-        return delete("/" + id, userId);
+    public ResponseEntity<Object> delete(String username, long id) {
+        return delete("/" + id, username);
     }
 
-    public ResponseEntity<Object> getAllFollowed(long userId, int from) {
+    public ResponseEntity<Object> getAllFollowed(String username, int from) {
         Map<String, Object> parameters = Map.of(
                 "from", from
         );
-        return get("/sub?from={from}", userId, parameters);
+        return get("/sub?from={from}", username, parameters);
     }
 }

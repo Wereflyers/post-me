@@ -1,7 +1,9 @@
 package com.example.postme.user.dto;
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -11,14 +13,14 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @Getter
 @Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserDto {
-    Long id;
+public class RegistrationUserDto {
     @NotEmpty
     @NotBlank
-    String username;
+    private String username;
+    private String password;
+    private String confirmPassword;
     @NotEmpty
     @NotBlank
     @Email
-    String email;
+    private String email;
 }

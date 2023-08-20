@@ -23,7 +23,7 @@ public class Post {
     String title;
     String description;
     String image;
-    Long creator;
+    String creator;
     @Column(name = "published")
     @DateTimeFormat
     LocalDateTime publishedOn;

@@ -7,48 +7,50 @@ import java.util.List;
 public interface FriendRequestService {
     /**
      * Создать запрос.
-     * @param userId           - подписчик
-     * @param followedId - пользователь, на кого подписываются
+     *
+     * @param username     - подписчик
+     * @param followedName - пользователь, на кого подписываются
      * @return FriendRequestDto
      */
-    FriendRequestDto add(long userId, long followedId);
+    FriendRequestDto add(String username, String followedName);
 
     /**
      * Получить запрос по идентификатору, доступно тому, кто отправил или получил запрос.
-     * @param userId - пользователь
+     * @param username - пользователь
      * @param id - номер запроса
      * @return FriendRequestDto
      */
-    FriendRequestDto get(long userId, long id);
+    FriendRequestDto get(String username, long id);
 
     /**
      * Получить список запросов в друзья.
-     * @param userId - получатель запросов
+     * @param username - получатель запросов
      * @param from - индекс первого элемента
      * @return List
      */
-    List<FriendRequestDto> getRequests(long userId, int from);
+    List<FriendRequestDto> getRequests(String username, int from);
 
     /**
      * Принять запрос в друзья от пользователя
      * @param requestId - запрос
-     * @param userId - пользователь, получивший запрос
+     * @param username - пользователь, получивший запрос
      * @return FriendRequestDto
      */
-    FriendRequestDto apply(long userId, long requestId);
+    FriendRequestDto apply(String username, long requestId);
 
     /**
      * Отклонить запрос в друзья от пользователя
      * @param requestId - запрос
-     * @param userId - пользователь, получивший запрос
+     * @param username - пользователь, получивший запрос
      * @return FriendRequestDto
      */
-    FriendRequestDto cancel(long userId, long requestId);
+    FriendRequestDto cancel(String username, long requestId);
 
     /**
      * Отписаться. При удалении из друзей пользователь также отписывается, другой пользователь остается в подписчиках
-     * @param userId - пользователь, который совершает отписку
-     * @param followedId - пользователь, на кого была подписка
+     *
+     * @param username     - пользователь, который совершает отписку
+     * @param followedName - пользователь, на кого была подписка
      */
-    void unsub(long userId, long followedId);
+    void unsub(String username, String followedName);
 }

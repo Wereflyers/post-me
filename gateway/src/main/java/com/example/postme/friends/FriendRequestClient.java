@@ -25,30 +25,30 @@ public class FriendRequestClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> getRequests(long userId, int from) {
+    public ResponseEntity<Object> getRequests(String username, int from) {
         Map<String, Object> parameters = Map.of(
                 "from", from
         );
-        return get("?from={from}", userId, parameters);
+        return get("?from={from}", username, parameters);
     }
 
-    public ResponseEntity<Object> add(long userId, long followedId) {
-        return post("/" + followedId, userId);
+    public ResponseEntity<Object> add(String username, String followedName) {
+        return post("/" + followedName, username, null);
     }
 
-    public ResponseEntity<Object> get(long userId, long requestId) {
-        return get("/" + requestId, userId);
+    public ResponseEntity<Object> get(String username, long requestId) {
+        return get("/" + requestId, username);
     }
 
-    public ResponseEntity<Object> apply(long userId, long requestId) {
-        return patch("/" + requestId + "/apply", userId);
+    public ResponseEntity<Object> apply(String username, long requestId) {
+        return patch("/" + requestId + "/apply", username);
     }
 
-    public ResponseEntity<Object> cancel(long userId, long requestId) {
-        return patch("/" + requestId + "/cancel", userId);
+    public ResponseEntity<Object> cancel(String username, long requestId) {
+        return patch("/" + requestId + "/cancel", username);
     }
 
-    public ResponseEntity<Object> unsub(long userId, long followedId) {
-        return delete("/" + followedId, userId);
+    public ResponseEntity<Object> unsub(String username, String followedName) {
+        return delete("/" + followedName, username);
     }
 }

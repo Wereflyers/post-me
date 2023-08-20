@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,38 +24,38 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
-    public FriendRequestDto add(long userId, long followedId) {
-        if (userRepository.findById(followedId).isEmpty()) {
+    public FriendRequestDto add(String username, String followedName) {
+        if (userRepository.findByName(followedName).isEmpty()) {
             throw new NullPointerException("User not found");
         }
         FriendRequest friendRequest = FriendRequest.builder()
-                .user(followedId)
-                .sub(userId)
+                .user(followedName)
+                .sub(username)
                 .status(RequestStatus.WAITING)
                 .build();
         return FriendRequestMapper.toFriendRequestDto(friendRequestRepository.save(friendRequest));
     }
 
     @Override
-    public FriendRequestDto get(long userId, long id) {
-        return FriendRequestMapper.toFriendRequestDto(friendRequestRepository.findByIdAndUserOrSub(id, userId, userId)
+    public FriendRequestDto get(String username, long requestId) {
+        return FriendRequestMapper.toFriendRequestDto(friendRequestRepository.findByIdAndUserOrSub(requestId, username, username)
                 .orElseThrow(() -> new NullPointerException("Request not found")));
     }
     @Override
-    public List<FriendRequestDto> getRequests(long userId, int from) {
+    public List<FriendRequestDto> getRequests(String username, int from) {
         if (from < 0) {
             throw new ValidationException("Wrong parameters");
         }
-        return friendRequestRepository.findAllBySub(userId, PageRequest.of(from / 10, 10)).stream()
+        return friendRequestRepository.findAllBySub(username, PageRequest.of(from / 10, 10)).stream()
                 .map(FriendRequestMapper::toFriendRequestDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public FriendRequestDto apply(long userId, long requestId) {
+    public FriendRequestDto apply(String username, long requestId) {
         FriendRequest friendRequest = friendRequestRepository.findById(requestId)
                 .orElseThrow(() -> new NullPointerException("Request not found"));
-        if (friendRequest.getUser() != userId || friendRequest.getStatus() != RequestStatus.WAITING) {
+        if (!Objects.equals(friendRequest.getUser(), username) || friendRequest.getStatus() != RequestStatus.WAITING) {
             throw new NullPointerException("Request not found");
         }
         friendRequest.setStatus(RequestStatus.ACCEPTED);
@@ -62,10 +63,10 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
-    public FriendRequestDto cancel(long userId, long requestId) {
+    public FriendRequestDto cancel(String username, long requestId) {
         FriendRequest friendRequest = friendRequestRepository.findById(requestId)
                 .orElseThrow(() -> new NullPointerException("Request not found"));
-        if (friendRequest.getUser() != userId || friendRequest.getStatus() != RequestStatus.WAITING) {
+        if (!Objects.equals(friendRequest.getUser(), username) || friendRequest.getStatus() != RequestStatus.WAITING) {
             throw new NullPointerException("Request not found");
         }
         friendRequest.setStatus(RequestStatus.CANCELED);
@@ -73,16 +74,16 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
-    public void unsub(long userId, long followedId) {
-        if (userRepository.findById(followedId).isEmpty()) {
+    public void unsub(String username, String followedName) {
+        if (userRepository.findByName(followedName).isEmpty()) {
             throw new NullPointerException("User not found");
         }
-        FriendRequest friendRequest = friendRequestRepository.findByUserAndSub(followedId, userId)
+        FriendRequest friendRequest = friendRequestRepository.findByUserAndSub(followedName, username)
                 .orElseThrow(() -> new WrongConditionException("You didn't subscribed on the user"));
         if (friendRequest.getStatus() == RequestStatus.ACCEPTED) {
             friendRequestRepository.save(FriendRequest.builder()
-                    .user(userId)
-                    .sub(followedId)
+                    .user(username)
+                    .sub(followedName)
                     .status(RequestStatus.CANCELED)
                     .build());
         }

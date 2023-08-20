@@ -56,4 +56,18 @@ public class ErrorHandler {
         log.info("Validation exception " + Arrays.toString(e.getStackTrace()));
         return new ApiError("BAD_REQUEST", "Incorrectly made request", e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError handleWrongRegException(final WrongRegException e) {
+        log.info("WrongRegException " + Arrays.toString(e.getStackTrace()));
+        return new ApiError("BAD_REQUEST", "For the requested operation the conditions are not met.", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiError handleUnauthorizedException(final UnauthorizedException e) {
+        log.info("UnauthorizedException " + Arrays.toString(e.getStackTrace()));
+        return new ApiError("UNAUTHORIZED", "User has not authorized.", e.getMessage());
+    }
 }

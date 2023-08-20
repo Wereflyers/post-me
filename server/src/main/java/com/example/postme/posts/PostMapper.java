@@ -7,12 +7,12 @@ import com.example.postme.user.dto.UserShort;
 import java.time.LocalDateTime;
 
 public class PostMapper {
-    public static Post fromNewPostDto(NewPostDto newPostDto, long userId) {
+    public static Post fromNewPostDto(NewPostDto newPostDto, String username) {
         return Post.builder()
                 .title(newPostDto.getTitle())
                 .description(newPostDto.getDescription())
                 .image(newPostDto.getImage())
-                .creator(userId)
+                .creator(username)
                 .publishedOn(LocalDateTime.now())
                 .build();
     }

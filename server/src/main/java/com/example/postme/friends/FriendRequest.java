@@ -18,10 +18,10 @@ public class FriendRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "request_id")
     Long id;
-    @Column(name = "user_id")
-    Long user;
-    @Column(name = "sub_id")
-    Long sub;
+    @Column(name = "user_name")
+    String user;
+    @Column(name = "sub_name")
+    String sub;
     @Enumerated(EnumType.STRING)
     RequestStatus status;
 }

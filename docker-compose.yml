@@ -9,8 +9,23 @@ services:
       - "8080:8080"
     depends_on:
       - server
+      - db-gateway
     environment:
-      - POSTME_SERVER_URL=http://localhost:9090
+      - POSTME_SERVER_URL=http://server:9090
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-gateway:5432/postme
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+
+  db-gateway:
+    image: postgres:13.7-alpine
+    container_name: postgresql-gateway
+    ports:
+      - "6542:5432"
+
+    environment:
+      - POSTGRES_DB=postme
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
 
   server:
     build:
@@ -20,15 +35,15 @@ services:
     ports:
       - "9090:9090"
     depends_on:
-      - db
+      - db-server
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-server:5432/shareit
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
 
-  db:
+  db-server:
     image: postgres:13.7-alpine
-    container_name: postgresql
+    container_name: postgresql-server
     ports:
       - "6541:5432"
 
