@@ -3,6 +3,8 @@ package com.example.postme.post.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -12,6 +14,5 @@ import lombok.experimental.FieldDefaults;
 public class NewPostDto {
     String title;
     String description;
-    //TODO images
-    String image;
+    List<NewImageDto> images;
 }

@@ -22,7 +22,6 @@ public class Post {
     Long id;
     String title;
     String description;
-    String image;
     String creator;
     @Column(name = "published")
     @DateTimeFormat

@@ -29,7 +29,6 @@ public class FriendRequestController {
         return friendRequestService.getRequests(username, from);
     }
 
-    //TODO disperancy between swagger
     @GetMapping("/{requestId}")
     public FriendRequestDto get(@RequestHeader String username, @PathVariable long requestId) {
         return friendRequestService.get(username, requestId);

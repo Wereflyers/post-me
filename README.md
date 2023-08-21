@@ -8,9 +8,10 @@ Some kind of simple social media with authorisation and posting. You can follow 
 * Spring boot
 * Maven
 * Docker
-* Coverage more than 70% by Postman tests
+* Coverage by Postman tests, Unit tests, Integration tests
 * Custom exceptions
 * PostgresSQL, Hibernate and JPA
+* Spring security with JWT hashing of passwords
 
 ## How to install
 
@@ -18,7 +19,6 @@ Some kind of simple social media with authorisation and posting. You can follow 
 2. Download and install Maven
 3. Download and install Docker
 4. Clone this repo
-5. Create PostgreSQL database
 
 ## How to use
 
@@ -26,8 +26,18 @@ Some kind of simple social media with authorisation and posting. You can follow 
 2. Open Docker and run docker-compose.yml
 3. Access endpoints through http://localhost:8080
 
+## How to test by Postman
+
+1. Download tests from /postman
+2. Create user in Postman ( /auth/Registration )
+3. Get token from Authentication
+4. Save token into collection variable "firstToken"
+5. Repeat with the second user
+6. Run the other folders
+
 ## Plans for future
 
-:black_square_button: Code style    
-:black_square_button: Authentication    
-:black_square_button: Pictures of items    
+:black_square_button: Redis    
+:black_square_button: >70% Coverage by tests    
+:black_square_button: Automatic Postman testing
+:black_square_button: Upgrade of images  

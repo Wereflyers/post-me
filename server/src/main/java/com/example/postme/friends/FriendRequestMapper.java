@@ -11,7 +11,7 @@ public class FriendRequestMapper {
         return FriendRequestDto.builder()
                 .id(friendRequest.getId())
                 .user(new UserShort(friendRequest.getUser()))
-                .requestFromUser(new UserShort(friendRequest.getSub()))
+                .sub(new UserShort(friendRequest.getSub()))
                 .status(friendRequest.getStatus())
                 .build();
     }

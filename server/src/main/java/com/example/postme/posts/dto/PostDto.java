@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,6 +19,5 @@ public class PostDto {
     LocalDateTime publishedOn;
     String title;
     String description;
-    //TODO images
-    String image;
+    List<ImageDto> images;
 }

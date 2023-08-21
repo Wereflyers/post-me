@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long>, QuerydslPredicateExecutor<Post> {
+
     List<Post> findAllByCreatorOrderByPublishedOn(String creator, PageRequest pageRequest);
+
     List<Post> findAllByCreatorInOrderByPublishedOnDesc(List<String> creators, PageRequest pageRequest);
 }
