@@ -12,6 +12,7 @@ Some kind of simple social media with authorisation and posting. You can follow 
 * Custom exceptions
 * PostgresSQL, Hibernate and JPA
 * Spring security with JWT hashing of passwords
+* Swagger documentation (https://app.swaggerhub.com/apis/ANNA1637/post-me/1.0.0)
 
 ## How to install
 
