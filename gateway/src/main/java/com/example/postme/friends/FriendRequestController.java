@@ -27,7 +27,6 @@ public class FriendRequestController {
         return friendRequestClient.getRequests(principal.getName(), from);
     }
 
-    //TODO disperancy between swagger
     @GetMapping("/{requestId}")
     public ResponseEntity<Object> get(Principal principal, @PathVariable long requestId) {
         log.info("Get request {} for {}", requestId, principal.getName());

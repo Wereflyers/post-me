@@ -26,7 +26,7 @@ public class Image {
     @Column(name = "content_type")
     private String contentType;
     @Lob
-    @Type(type="org.hibernate.type.BinaryType")
+    @Type(type = "org.hibernate.type.BinaryType")
     private byte[] bytes;
     @Column(name = "from_post")
     private Long fromPost;

@@ -45,6 +45,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
         return FriendRequestMapper.toFriendRequestDto(friendRequestRepository.findByIdAndUserOrSub(requestId, username, username)
                 .orElseThrow(() -> new NullPointerException("Request not found")));
     }
+
     @Override
     public List<FriendRequestDto> getRequests(String username, int from) {
         if (from < 0) {

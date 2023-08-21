@@ -16,6 +16,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     @PostMapping
     public UserDto add(@RequestBody UserDto userDto) {
         return userService.add(userDto);

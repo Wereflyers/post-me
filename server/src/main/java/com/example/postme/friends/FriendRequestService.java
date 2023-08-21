@@ -5,6 +5,7 @@ import com.example.postme.friends.dto.FriendRequestDto;
 import java.util.List;
 
 public interface FriendRequestService {
+
     /**
      * Создать запрос.
      *
