@@ -12,6 +12,7 @@ Some kind of simple social media with authorisation and posting. You can follow 
 * Custom exceptions
 * PostgresSQL, Hibernate and JPA
 * Spring security with JWT hashing of passwords
+* Redis
 * Swagger documentation (https://app.swaggerhub.com/apis/ANNA1637/post-me/1.0.0)
 
 ## How to install
@@ -38,7 +39,7 @@ Some kind of simple social media with authorisation and posting. You can follow 
 
 ## Plans for future
 
-:black_square_button: Redis    
+:white_check_mark: Redis    
 :black_square_button: >70% Coverage by tests    
 :black_square_button: Automatic Postman testing
 :black_square_button: Upgrade of images  
