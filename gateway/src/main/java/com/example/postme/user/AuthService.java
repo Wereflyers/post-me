@@ -8,6 +8,7 @@ import com.example.postme.user.dto.JwtResponse;
 import com.example.postme.user.dto.RegistrationUserDto;
 import com.example.postme.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -43,6 +45,6 @@ public class AuthService {
             throw  new WrongRegException("Пользователь с указанным именем уже существует");
         }
         UserAuth user = userService.createNewUser(registrationUserDto);
-        return userClient.addUser(new UserDto(user.getId(), user.getUsername(), user.getEmail()));
+        return userClient.addUser(new UserDto(user.getId(), user.getUsername(), registrationUserDto.getEmail()));
     }
 }

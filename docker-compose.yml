@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.1'
 services:
   gateway:
     build:
@@ -9,23 +9,19 @@ services:
       - "8080:8080"
     depends_on:
       - server
-      - db-gateway
+      - redis
     environment:
       - POSTME_SERVER_URL=http://server:9090
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-gateway:5432/postme
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      - API_REDIS_HOST=redis
 
-  db-gateway:
-    image: postgres:13.7-alpine
-    container_name: postgresql-gateway
+  redis:
+    image: redis:7.2.1-alpine
+    container_name: redis
     ports:
-      - "6542:5432"
-
+      - "6379:6379"
     environment:
-      - POSTGRES_DB=postme
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=root
 
   server:
     build:
@@ -42,11 +38,10 @@ services:
       - POSTGRES_PASSWORD=root
 
   db-server:
-    image: postgres:13.7-alpine
+    image: postgres:14-alpine
     container_name: postgresql-server
     ports:
       - "6541:5432"
-
     environment:
       - POSTGRES_DB=shareit
       - POSTGRES_USER=root
