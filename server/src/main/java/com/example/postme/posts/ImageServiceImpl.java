@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ImageServiceImpl {
+public class ImageServiceImpl implements ImageService{
     private final ImageRepository imageRepository;
 
     @Transactional
@@ -20,12 +20,14 @@ public class ImageServiceImpl {
         ImageMapper.toImageDto(imageRepository.save(ImageMapper.toImage(newImageDto, postId)));
     }
 
+    @Override
     public List<ImageDto> getImage(long postId) {
         return imageRepository.findAllByFromPost(postId).stream()
                 .map(ImageMapper::toImageDto)
                 .collect(Collectors.toList());
     }
 
+    @Override
     @Transactional
     public void deleteImages(long postId) {
         imageRepository.findAllByFromPost(postId).stream()

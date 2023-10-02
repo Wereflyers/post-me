@@ -53,7 +53,7 @@ class PostControllerIntegrationTest {
 
     @SneakyThrows
     @Test
-    void getAll() {
+    void getAllTest() {
         when(postService.getAllForUser(user, 0, 100)).thenReturn(List.of(postDto));
 
         mockMvc.perform(get("/posts")
@@ -67,7 +67,7 @@ class PostControllerIntegrationTest {
 
     @SneakyThrows
     @Test
-    void get_Post() {
+    void getTest() {
         when(postService.get(postId, user)).thenReturn(postDto);
 
         String result = mockMvc.perform(get("/posts/{postId}", postId)
@@ -83,7 +83,7 @@ class PostControllerIntegrationTest {
 
     @SneakyThrows
     @Test
-    void add() {
+    void addTest() {
         postDto = PostMapper.toPostDto(PostMapper.fromNewPostDto(newPostDto, user),null);
 
         when(postService.add(anyString(), any())).thenReturn(postDto);
@@ -103,7 +103,7 @@ class PostControllerIntegrationTest {
 
     @SneakyThrows
     @Test
-    void update() {
+    void updateTest() {
         postDto = PostMapper.toPostDto(PostMapper.fromNewPostDto(newPostDto, user),null);
 
         when(postService.update(anyString(), anyLong(), any())).thenReturn(postDto);
@@ -123,7 +123,7 @@ class PostControllerIntegrationTest {
 
     @SneakyThrows
     @Test
-    void deleteItem() {
+    void deleteItemTest() {
         mockMvc.perform(delete("/posts/{postId}", postId)
                         .header("username", user))
                 .andExpect(status().isNoContent());
@@ -133,7 +133,7 @@ class PostControllerIntegrationTest {
 
     @SneakyThrows
     @Test
-    void getAllFollowed() {
+    void getAllFollowedTest() {
         when(postService.getAllFollowed(user, 0)).thenReturn(List.of(postDto));
 
         mockMvc.perform(get("/posts/sub")

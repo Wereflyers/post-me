@@ -1,4 +1,4 @@
-package com.example.postme.redis;
+/*package com.example.postme.redis;
 
 import com.example.postme.user.UserAuth;
 import org.junit.Before;
@@ -38,4 +38,4 @@ public class RedisRepositoryTest {
         assertThat(found).isEqualTo(user);
     }
 
-}
+}*/

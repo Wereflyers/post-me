@@ -14,7 +14,7 @@ class ErrorHandlerTest {
     private ErrorHandler errorHandler;
 
     @Test
-    void handleNullException() {
+    void handleNullExceptionTest() {
         ApiError apiError = errorHandler.handleNullException(new NullPointerException("NullPointerException"));
 
         assertEquals(apiError.getReason(), "NullPointerException");
@@ -23,7 +23,7 @@ class ErrorHandlerTest {
     }
 
     @Test
-    void handleValidationException() {
+    void handleValidationExceptionTest() {
         ApiError apiError = errorHandler.handleValidationException(new MissingServletRequestParameterException("parameterName", "parameterType"));
 
         assertEquals(apiError.getReason(), "Required request parameter 'parameterName' for method parameter type parameterType is not present");
@@ -32,7 +32,7 @@ class ErrorHandlerTest {
     }
 
     @Test
-    void handleDuplicateException() {
+    void handleDuplicateExceptionTest() {
         ApiError apiError = errorHandler.handleDuplicateException(new DuplicateException("DuplicateException"));
 
         assertEquals(apiError.getReason(), "DuplicateException");
@@ -41,7 +41,7 @@ class ErrorHandlerTest {
     }
 
     @Test
-    void handleWrongConditionException() {
+    void handleWrongConditionExceptionTest() {
         ApiError apiError = errorHandler.handleWrongConditionException(new WrongConditionException("Exception"));
 
         assertEquals(apiError.getReason(), "Exception");

@@ -24,4 +24,10 @@ public class FriendRequest {
     String sub;
     @Enumerated(EnumType.STRING)
     RequestStatus status;
+
+    public FriendRequest(String user, String sub, RequestStatus status) {
+        this.user = user;
+        this.sub = sub;
+        this.status = status;
+    }
 }

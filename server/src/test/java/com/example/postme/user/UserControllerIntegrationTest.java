@@ -29,7 +29,7 @@ class UserControllerIntegrationTest {
 
     @SneakyThrows
     @Test
-    void add() {
+    void addTest() {
         UserDto userToCreate = new UserDto();
         userToCreate.setUsername("boris");
         userToCreate.setEmail("user@user.com");

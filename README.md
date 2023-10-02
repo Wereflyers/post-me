@@ -1,6 +1,6 @@
 # post-me :left_right_arrow:
 
-Some kind of simple social media with authorisation and posting. You can follow or make friends with somebody you like.
+Some kind of simple social media with authorization and posting. You can follow or make friends with somebody you like.
 
 ## Features
 

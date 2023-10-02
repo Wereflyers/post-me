@@ -66,7 +66,8 @@ public class PostServiceImpl implements PostService {
                 imageService.saveImage(imageDto, postId);
             }
         }
-        return createPostDtoWithImages(post);
+        Post savedPost = postRepository.save(post);
+        return createPostDtoWithImages(savedPost);
     }
 
     @Override
@@ -83,7 +84,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> getAllFollowed(String username, int from) {
-        List<FriendRequest> followedUsers = friendRequestRepository.findAllBySub(username, PageRequest.of(0 / 20, 20));
+        List<FriendRequest> followedUsers = friendRequestRepository.findAllBySub(username);
         List<String> followedUsersNames = followedUsers.stream()
                 .map(FriendRequest::getUser)
                 .collect(Collectors.toList());

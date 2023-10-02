@@ -1,5 +1,6 @@
 package com.example.postme.user;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,16 @@ class UserRepositoryIntegrationTest {
     }
 
     @Test
-    void findAllByEmail() {
+    void findAllByEmailTest() {
         Optional<User> user = userRepository.findByName("john");
 
         assertFalse(user.isEmpty());
         assertEquals(user.get().getEmail(), "john@mail.ru");
         assertEquals(user.get().getName(), "john");
+    }
+
+    @AfterEach
+    public void clean() {
+        userRepository.deleteAll();
     }
 }
