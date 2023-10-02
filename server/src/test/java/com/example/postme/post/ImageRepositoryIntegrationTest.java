@@ -58,6 +58,7 @@ class ImageRepositoryIntegrationTest {
         assertEquals(1, images.size());
         assertEquals(image, images.get(0));
     }
+
     @AfterEach
     public void clean() {
         imageRepository.deleteAll();

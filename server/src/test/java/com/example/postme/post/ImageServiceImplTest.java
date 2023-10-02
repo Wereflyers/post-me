@@ -34,6 +34,7 @@ class ImageServiceImplTest {
     @BeforeEach
     public void create() {
         image = Image.builder()
+                .id(2L)
                 .name("image")
                 .fileName("filename")
                 .bytes(new byte[]{})
@@ -76,6 +77,8 @@ class ImageServiceImplTest {
     void deleteImagesTest() {
         when(imageRepository.findAllByFromPost(postId)).thenReturn(List.of(image));
 
-        verify(imageRepository).deleteById(postId);
+        imageService.deleteImages(postId);
+
+        verify(imageRepository).deleteById(2L);
     }
 }
