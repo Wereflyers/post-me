@@ -4,6 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.Objects;
 
 @Entity
 @Table(name = "images")
@@ -30,4 +32,32 @@ public class Image {
     private byte[] bytes;
     @Column(name = "from_post")
     private Long fromPost;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Image image = (Image) o;
+
+        if (!Objects.equals(id, image.id)) return false;
+        if (!name.equals(image.name)) return false;
+        if (!fileName.equals(image.fileName)) return false;
+        if (!Objects.equals(size, image.size)) return false;
+        if (!contentType.equals(image.contentType)) return false;
+        if (!Arrays.equals(bytes, image.bytes)) return false;
+        return Objects.equals(fromPost, image.fromPost);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + fileName.hashCode();
+        result = 31 * result + (size != null ? size.hashCode() : 0);
+        result = 31 * result + contentType.hashCode();
+        result = 31 * result + Arrays.hashCode(bytes);
+        result = 31 * result + (fromPost != null ? fromPost.hashCode() : 0);
+        return result;
+    }
 }

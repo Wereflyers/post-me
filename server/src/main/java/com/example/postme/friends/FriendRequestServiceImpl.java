@@ -5,12 +5,10 @@ import com.example.postme.exception.WrongConditionException;
 import com.example.postme.friends.dto.FriendRequestDto;
 import com.example.postme.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,8 +40,10 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 
     @Override
     public FriendRequestDto get(String username, long requestId) {
-        return FriendRequestMapper.toFriendRequestDto(friendRequestRepository.findByIdAndUserOrSub(requestId, username, username)
-                .orElseThrow(() -> new NullPointerException("Request not found")));
+        FriendRequest request = friendRequestRepository.findById(requestId)
+                .filter(r -> (r.getUser().equals(username) || r.getSub().equals(username)))
+                .orElseThrow(() -> new NullPointerException("Request not found"));
+        return FriendRequestMapper.toFriendRequestDto(request);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class FriendRequestServiceImpl implements FriendRequestService {
         if (from < 0) {
             throw new ValidationException("Wrong parameters");
         }
-        return friendRequestRepository.findAllBySub(username, PageRequest.of(from / 10, 10)).stream()
+        return friendRequestRepository.findAllBySub(username).stream()
                 .map(FriendRequestMapper::toFriendRequestDto)
                 .collect(Collectors.toList());
     }
@@ -60,10 +60,9 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     @Transactional
     public FriendRequestDto apply(String username, long requestId) {
         FriendRequest friendRequest = friendRequestRepository.findById(requestId)
+                .filter(r -> r.getUser().equals(username))
+                .filter(r -> r.getStatus() == RequestStatus.WAITING)
                 .orElseThrow(() -> new NullPointerException("Request not found"));
-        if (!Objects.equals(friendRequest.getUser(), username) || friendRequest.getStatus() != RequestStatus.WAITING) {
-            throw new NullPointerException("Request not found");
-        }
         friendRequest.setStatus(RequestStatus.ACCEPTED);
         return FriendRequestMapper.toFriendRequestDto(friendRequestRepository.save(friendRequest));
     }
@@ -72,10 +71,9 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     @Transactional
     public FriendRequestDto cancel(String username, long requestId) {
         FriendRequest friendRequest = friendRequestRepository.findById(requestId)
+                .filter(r -> r.getUser().equals(username))
+                .filter(r -> r.getStatus() == RequestStatus.WAITING)
                 .orElseThrow(() -> new NullPointerException("Request not found"));
-        if (!Objects.equals(friendRequest.getUser(), username) || friendRequest.getStatus() != RequestStatus.WAITING) {
-            throw new NullPointerException("Request not found");
-        }
         friendRequest.setStatus(RequestStatus.CANCELED);
         return FriendRequestMapper.toFriendRequestDto(friendRequestRepository.save(friendRequest));
     }

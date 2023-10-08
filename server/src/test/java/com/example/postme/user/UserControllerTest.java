@@ -29,7 +29,7 @@ class UserControllerTest {
     }
 
     @Test
-    void add_whenOK_thenReturnUser() {
+    void addTest() {
         when(userService.add(user1)).thenReturn(user1);
 
         UserDto actualUser = userController.add(user1);

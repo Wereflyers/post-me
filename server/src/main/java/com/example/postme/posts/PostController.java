@@ -22,8 +22,7 @@ public class PostController {
     }
 
     @GetMapping
-    public List<PostDto> getAll(@RequestHeader String username, @RequestParam(defaultValue = "0") int from,
-                                @RequestParam(defaultValue = "10") int size) {
+    public List<PostDto> getAll(@RequestHeader String username, @RequestParam int from, @RequestParam int size) {
         if (from < 0 || size < 1) {
             throw new ValidationException("Wrong parameters");
         }
@@ -53,7 +52,7 @@ public class PostController {
     }
 
     @GetMapping("/sub")
-    public List<PostDto> getAllFollowed(@RequestHeader String username, @RequestParam(defaultValue = "0") int from) {
+    public List<PostDto> getAllFollowed(@RequestHeader String username, @RequestParam int from) {
         if (from < 0) {
             throw new ValidationException("Wrong parameters");
         }

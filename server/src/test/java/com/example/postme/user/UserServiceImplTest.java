@@ -33,7 +33,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void add_whenOK_thenReturnCreated() {
+    void addTest() {
         when(userRepository.save(any())).thenReturn(user1);
 
         UserDto actualUser = userService.add(UserMapper.toUserDto(user1));
@@ -44,7 +44,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void add_whenDuplicatedEmail_thenThrowException() {
+    void addExceptionTest() {
         when(userRepository.save(any())).thenThrow(DuplicateException.class);
 
         assertThrows(DuplicateException.class, () -> userService.add(UserMapper.toUserDto(user1)));
